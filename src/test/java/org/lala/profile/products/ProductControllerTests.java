@@ -7,7 +7,6 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.hateoas.MediaTypes;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -77,6 +76,22 @@ public class ProductControllerTests {
     @Test
     public void createProduct_Bad_Request_Empty_Input() throws Exception {
         ProductDto productDto = ProductDto.builder()
+                .build();
+
+        this.mockMvc.perform(post("/products")
+                .contentType(MediaType.APPLICATION_JSON_UTF8)
+                .content(objectMapper.writeValueAsString(productDto))
+        )
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    public void createProduct_Bad_Request_Wrong_Input() throws Exception {
+        ProductDto productDto = ProductDto.builder()
+                .name("lala profile")
+                .introduce("personal profile")
+                .imageUrl("aaa")
+                .tech(new String[]{"spring boot", "rest api", "react"})
                 .build();
 
         this.mockMvc.perform(post("/products")

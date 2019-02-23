@@ -22,9 +22,12 @@ public class ProductController {
 
     private ModelMapper modelMapper;
 
-    public ProductController(ProductRepository productRepository, ModelMapper modelMapper) {
+    private ProductValidator productValidator;
+
+    public ProductController(ProductRepository productRepository, ModelMapper modelMapper, ProductValidator productValidator) {
         this.productRepository = productRepository;
         this.modelMapper = modelMapper;
+        this.productValidator = productValidator;
     }
 
     @PostMapping
@@ -33,6 +36,13 @@ public class ProductController {
         if (errors.hasErrors()) {
             return ResponseEntity.badRequest().build();
         }
+
+        productValidator.validate(productDto, errors);
+
+        if (errors.hasErrors()) {
+            return ResponseEntity.badRequest().build();
+        }
+
         Product product = modelMapper.map(productDto, Product.class);
         Product newProduct = this.productRepository.save(product);
 
