@@ -49,7 +49,7 @@ public class ProductControllerTests {
                 .andExpect(jsonPath("id").exists())
                 .andExpect(header().exists(HttpHeaders.LOCATION))
                 .andExpect(header().string(HttpHeaders.CONTENT_TYPE, MediaTypes.HAL_JSON_UTF8_VALUE))
-                .andExpect(jsonPath("id").value(Matchers.not(100)))
+                .andExpect(jsonPath("id").exists())
                 .andExpect(jsonPath("name").isNotEmpty())
         ;
     }
@@ -108,7 +108,6 @@ public class ProductControllerTests {
                 .andExpect(jsonPath("$[0].objectName").exists())
                 .andExpect(jsonPath("$[0].defaultMessage").exists())
                 .andExpect(jsonPath("$[0].code").exists())
-
         ;
     }
 }
