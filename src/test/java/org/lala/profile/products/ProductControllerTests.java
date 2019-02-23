@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.hamcrest.Matchers;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.lala.profile.common.TestDescription;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -29,6 +30,7 @@ public class ProductControllerTests {
     ObjectMapper objectMapper;
 
     @Test
+    @TestDescription("정상적으로 Product를 저장하는 테스트")
     public void createProduct() throws Exception {
         ProductDto product = ProductDto.builder()
                 .name("lala profile")
@@ -53,6 +55,7 @@ public class ProductControllerTests {
     }
 
     @Test
+    @TestDescription("입력 받을 수 없는 값이 들어온 경우 에러가 발생")
     public void createProduct_Bad_Request() throws Exception {
         Product product = Product.builder()
                 .id(10)
@@ -74,6 +77,7 @@ public class ProductControllerTests {
     }
 
     @Test
+    @TestDescription("필수 입력값이 없는 경우 에러가 발생")
     public void createProduct_Bad_Request_Empty_Input() throws Exception {
         ProductDto productDto = ProductDto.builder()
                 .build();
@@ -86,6 +90,7 @@ public class ProductControllerTests {
     }
 
     @Test
+    @TestDescription("입력값이 잘못된 경우 에러가 발생")
     public void createProduct_Bad_Request_Wrong_Input() throws Exception {
         ProductDto productDto = ProductDto.builder()
                 .name("lala profile")
