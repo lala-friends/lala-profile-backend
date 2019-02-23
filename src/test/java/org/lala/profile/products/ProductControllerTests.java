@@ -31,8 +31,7 @@ public class ProductControllerTests {
 
     @Test
     public void createProduct() throws Exception {
-        Product product = Product.builder()
-                            .id(10)
+        ProductDto product = ProductDto.builder()
                             .name("lala profile")
                             .introduce("personal profile")
                             .imageUrl("https://www.google.com/url?sa=i&source=images&cd=&ved=2ahUKEwjem66J-dDgAhVQGKYKHVBKBTkQjRx6BAgBEAU&url=https%3A%2F%2Fwww.facebook.com%2Fkakaofriends%2F&psig=AOvVaw1nuQ1v4-gvK4Kac507Gl5o&ust=1550980050138484")
@@ -51,6 +50,27 @@ public class ProductControllerTests {
                 .andExpect(header().string(HttpHeaders.CONTENT_TYPE, MediaTypes.HAL_JSON_UTF8_VALUE))
                 .andExpect(jsonPath("id").value(Matchers.not(100)))
                 .andExpect(jsonPath("name").isNotEmpty())
+        ;
+    }
+
+    @Test
+    public void createProduct_bad_request() throws Exception {
+        Product product = Product.builder()
+                            .id(10)
+                            .name("lala profile")
+                            .introduce("personal profile")
+                            .imageUrl("https://www.google.com/url?sa=i&source=images&cd=&ved=2ahUKEwjem66J-dDgAhVQGKYKHVBKBTkQjRx6BAgBEAU&url=https%3A%2F%2Fwww.facebook.com%2Fkakaofriends%2F&psig=AOvVaw1nuQ1v4-gvK4Kac507Gl5o&ust=1550980050138484")
+                            .tech(new String[] {"spring boot", "rest api", "react"})
+                            .build();
+
+        mockMvc.perform(post("/products")
+                .contentType(MediaType.APPLICATION_JSON_UTF8)
+                .accept(MediaTypes.HAL_JSON)
+                .content(objectMapper.writeValueAsString(product))
+                )
+                .andDo(print())
+                .andExpect(status().isBadRequest())
+
         ;
     }
 }
