@@ -1,11 +1,12 @@
 package org.lala.profile.products;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.hamcrest.Matchers;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.hateoas.MediaTypes;
 import org.springframework.http.HttpHeaders;
@@ -18,7 +19,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @RunWith(SpringRunner.class)
-@WebMvcTest
+@SpringBootTest
+@AutoConfigureMockMvc
 public class ProductControllerTests {
 
     @Autowired
@@ -27,20 +29,15 @@ public class ProductControllerTests {
     @Autowired
     ObjectMapper objectMapper;
 
-    @MockBean
-    ProductRepository productRepository;
-
     @Test
     public void createProduct() throws Exception {
         Product product = Product.builder()
+                            .id(10)
                             .name("lala profile")
                             .introduce("personal profile")
                             .imageUrl("https://www.google.com/url?sa=i&source=images&cd=&ved=2ahUKEwjem66J-dDgAhVQGKYKHVBKBTkQjRx6BAgBEAU&url=https%3A%2F%2Fwww.facebook.com%2Fkakaofriends%2F&psig=AOvVaw1nuQ1v4-gvK4Kac507Gl5o&ust=1550980050138484")
                             .tech(new String[] {"spring boot", "rest api", "react"})
                             .build();
-
-        product.setId(10);
-        Mockito.when(productRepository.save(product)).thenReturn(product);
 
         mockMvc.perform(post("/products")
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
@@ -52,6 +49,8 @@ public class ProductControllerTests {
                 .andExpect(jsonPath("id").exists())
                 .andExpect(header().exists(HttpHeaders.LOCATION))
                 .andExpect(header().string(HttpHeaders.CONTENT_TYPE, MediaTypes.HAL_JSON_UTF8_VALUE))
+                .andExpect(jsonPath("id").value(Matchers.not(100)))
+                .andExpect(jsonPath("name").isNotEmpty())
         ;
     }
 }
