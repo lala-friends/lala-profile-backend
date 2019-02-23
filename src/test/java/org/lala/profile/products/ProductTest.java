@@ -1,9 +1,14 @@
 package org.lala.profile.products;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import junitparams.JUnitParamsRunner;
+import junitparams.Parameters;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+@RunWith(JUnitParamsRunner.class)
 public class ProductTest {
 
     @Test
@@ -17,10 +22,8 @@ public class ProductTest {
     }
 
     @Test
-    public void javaBean() {
-        // Given
-        String name = "lala profile";
-        String introduce = "personal profile";
+    @Parameters
+    public void javaBean(String name, String introduce) {
 
         // When
         Product product = new Product();
@@ -31,4 +34,13 @@ public class ProductTest {
         assertThat(product.getName()).isEqualTo(name);
         assertThat(product.getIntroduce()).isEqualTo(introduce);
     }
+
+    // Given
+    private Object[] parametersForJavaBean() {
+        return new Object[]{
+                new Object[]{"lala profile", "personal profile"}
+        };
+    }
+
+
 }
