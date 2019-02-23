@@ -34,13 +34,13 @@ public class ProductController {
     public ResponseEntity createProduct(@RequestBody @Valid ProductDto productDto, Errors errors) {
 
         if (errors.hasErrors()) {
-            return ResponseEntity.badRequest().build();
+            return ResponseEntity.badRequest().body(errors);
         }
 
         productValidator.validate(productDto, errors);
 
         if (errors.hasErrors()) {
-            return ResponseEntity.badRequest().build();
+            return ResponseEntity.badRequest().body(errors);
         }
 
         Product product = modelMapper.map(productDto, Product.class);
