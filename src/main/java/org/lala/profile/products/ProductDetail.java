@@ -2,6 +2,8 @@ package org.lala.profile.products;
 
 import lombok.*;
 
+import javax.persistence.Id;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -9,6 +11,7 @@ import lombok.*;
 @Builder
 public class ProductDetail {
 
+    @Id
     private Integer id;
     private String title;
     private String description;

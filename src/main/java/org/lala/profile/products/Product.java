@@ -3,9 +3,7 @@ package org.lala.profile.products;
 
 import lombok.*;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Builder
 @AllArgsConstructor
@@ -23,4 +21,8 @@ public class Product {
     private String introduce;
     private String[] tech;
     private String imageUrl;
+
+    @OneToOne(cascade = CascadeType.ALL, optional = false, fetch = FetchType.LAZY)
+    @JoinColumn(name = "id", nullable = false, unique = true)
+    private ProductDetail productDetail;
 }
