@@ -10,16 +10,17 @@ import javax.validation.constraints.NotEmpty;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class ProductDto {
+public class ProductDetailDto {
 
     @NotEmpty
-    private String name;
+    private String title;
 
     @NotEmpty
-    private String introduce;
-
-    @NotEmpty
-    private String[] tech;
+    private String description;
 
     private String imageUrl;
+
+    @NotEmpty
+    private Integer productId;
+
 }
