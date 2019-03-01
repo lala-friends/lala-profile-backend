@@ -20,7 +20,4 @@ public class ProductDetailDto {
 
     private String imageUrl;
 
-    @NotEmpty
-    private Integer productId;
-
 }

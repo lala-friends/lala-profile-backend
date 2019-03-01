@@ -2,6 +2,8 @@ package org.lala.profile.products;
 
 import lombok.*;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
 @Getter
@@ -9,13 +11,14 @@ import javax.persistence.Id;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@EqualsAndHashCode(of = "id")   // for entity reference
+@Entity
 public class ProductDetail {
 
     @Id
+    @GeneratedValue
     private Integer id;
     private String title;
     private String description;
     private String imageUrl;
-
-    private Integer productId;
 }

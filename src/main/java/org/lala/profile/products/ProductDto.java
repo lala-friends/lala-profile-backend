@@ -22,4 +22,5 @@ public class ProductDto {
     private String[] tech;
 
     private String imageUrl;
+    private String color;
 }

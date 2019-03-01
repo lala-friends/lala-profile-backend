@@ -16,7 +16,6 @@ public class ProductDetailTest {
                 .title("lala profile")
                 .description("personal profile")
                 .imageUrl("https://www.google.com/url?sa=i&source=images&cd=&ved=2ahUKEwjem66J-dDgAhVQGKYKHVBKBTkQjRx6BAgBEAU&url=https%3A%2F%2Fwww.facebook.com%2Fkakaofriends%2F&psig=AOvVaw1nuQ1v4-gvK4Kac507Gl5o&ust=1550980050138484")
-                .productId(1)
                 .build();
 
         assertThat(productDetail).isNotNull();

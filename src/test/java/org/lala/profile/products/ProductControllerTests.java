@@ -31,11 +31,13 @@ public class ProductControllerTests {
     @Test
     @TestDescription("정상적으로 Product를 저장하는 테스트")
     public void createProduct() throws Exception {
+
         ProductDto product = ProductDto.builder()
                 .name("lala profile")
                 .introduce("personal profile")
                 .imageUrl("https://www.google.com/url?sa=i&source=images&cd=&ved=2ahUKEwjem66J-dDgAhVQGKYKHVBKBTkQjRx6BAgBEAU&url=https%3A%2F%2Fwww.facebook.com%2Fkakaofriends%2F&psig=AOvVaw1nuQ1v4-gvK4Kac507Gl5o&ust=1550980050138484")
                 .tech(new String[]{"spring boot", "rest api", "react"})
+                .color("red")
                 .build();
 
         mockMvc.perform(post("/products")
@@ -45,7 +47,6 @@ public class ProductControllerTests {
         )
                 .andDo(print())
                 .andExpect(status().isCreated())
-                .andExpect(jsonPath("id").exists())
                 .andExpect(header().exists(HttpHeaders.LOCATION))
                 .andExpect(header().string(HttpHeaders.CONTENT_TYPE, MediaTypes.HAL_JSON_UTF8_VALUE))
                 .andExpect(jsonPath("id").exists())
