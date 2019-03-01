@@ -1,6 +1,7 @@
 package org.lala.profile.products;
 
 import lombok.*;
+import org.lala.profile.commons.AbstractTimestampEntity;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -11,9 +12,9 @@ import javax.persistence.Id;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@EqualsAndHashCode(of = "id")   // for entity reference
+@EqualsAndHashCode(of = "id", callSuper = false)   // for entity reference
 @Entity
-public class ProductDetail {
+public class ProductDetail extends AbstractTimestampEntity {
 
     @Id
     @GeneratedValue

@@ -1,6 +1,5 @@
 package org.lala.profile.products;
 
-
 import lombok.*;
 import org.lala.profile.commons.AbstractTimestampEntity;
 
@@ -13,7 +12,7 @@ import javax.persistence.Id;
 @NoArgsConstructor
 @Getter
 @Setter
-@EqualsAndHashCode(of = "id")   // for entity reference
+@EqualsAndHashCode(of = "id", callSuper = false)   // for entity reference
 @Entity
 public class Product extends AbstractTimestampEntity {
 
