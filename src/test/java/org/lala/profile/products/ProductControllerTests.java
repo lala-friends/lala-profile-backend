@@ -1,26 +1,21 @@
 package org.lala.profile.products;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.lala.profile.common.TestDescription;
+
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.lala.profile.common.AbstractCommonTest;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.hateoas.MediaTypes;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@RunWith(SpringRunner.class)
-@SpringBootTest
-@AutoConfigureMockMvc
-public class ProductControllerTests {
+public class ProductControllerTests extends AbstractCommonTest {
 
     @Autowired
     MockMvc mockMvc;
@@ -29,8 +24,8 @@ public class ProductControllerTests {
     ObjectMapper objectMapper;
 
     @Test
-    @TestDescription("정상적으로 Product를 저장하는 테스트")
-    public void createProduct() throws Exception {
+    @DisplayName("정상적으로 Product를 저장하는 테스트")
+    void createProduct() throws Exception {
 
         ProductDto product = ProductDto.builder()
                 .name("lala profile")
@@ -55,8 +50,8 @@ public class ProductControllerTests {
     }
 
     @Test
-    @TestDescription("입력 받을 수 없는 값이 들어온 경우 에러가 발생")
-    public void createProduct_Bad_Request() throws Exception {
+    @DisplayName("입력 받을 수 없는 값이 들어온 경우 에러가 발생")
+    void createProduct_Bad_Request() throws Exception {
         Product product = Product.builder()
                 .id(10)
                 .name("lala profile")
@@ -77,8 +72,8 @@ public class ProductControllerTests {
     }
 
     @Test
-    @TestDescription("필수 입력값이 없는 경우 에러가 발생")
-    public void createProduct_Bad_Request_Empty_Input() throws Exception {
+    @DisplayName("필수 입력값이 없는 경우 에러가 발생")
+    void createProduct_Bad_Request_Empty_Input() throws Exception {
         ProductDto productDto = ProductDto.builder()
                 .build();
 
@@ -90,8 +85,8 @@ public class ProductControllerTests {
     }
 
     @Test
-    @TestDescription("입력값이 잘못된 경우 에러가 발생")
-    public void createProduct_Bad_Request_Wrong_Input() throws Exception {
+    @DisplayName("입력값이 잘못된 경우 에러가 발생")
+    void createProduct_Bad_Request_Wrong_Input() throws Exception {
         ProductDto productDto = ProductDto.builder()
                 .name("lala profile")
                 .introduce("personal profile")
