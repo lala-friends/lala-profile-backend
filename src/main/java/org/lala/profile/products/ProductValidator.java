@@ -1,32 +1,28 @@
 package org.lala.profile.products;
 
+import org.apache.commons.lang3.ArrayUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.validator.routines.UrlValidator;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 
 @Component
 public class ProductValidator {
 
+    @Autowired
+    private UrlValidator urlValidator;
+
     public void validate(ProductDto productDto, Errors errors) {
 
-//        if (productDto.getProductDetailDto() == null || productDto.getProductDetailDto() == null) {
-//            errors.rejectValue("productDetail", "emptyEntity", "ProductDetail is essential");
-//            return;
-//        }
-
-        UrlValidator urlValidator = new UrlValidator();
-
-        if (!productDto.getImageUrl().isEmpty() &&
-                !urlValidator.isValid(productDto.getImageUrl())) {
-            errors.rejectValue("imageUrl", "wrongValue", "Image URL is not URL Pattern");
-            return;
+        // image url 의 유효성 체크
+        if(!ArrayUtils.isEmpty(productDto.getImageUrls())) {
+            for (String url: productDto.getImageUrls()) {
+                if(StringUtils.isEmpty(url) || !urlValidator.isValid(url)) {
+                    errors.rejectValue("imageUrls", "wrongValue", "Image URL is not URL Pattern");
+                    return;
+                }
+            }
         }
-
-//        if (productDto.getProductDetailDto() != null &&
-//                !productDto.getProductDetailDto().getImageUrl().isEmpty() &&
-//                !urlValidator.isValid(productDto.getProductDetailDto().getImageUrl())) {
-//            errors.rejectValue("productDetail.imageUrl", "wrongValue", "Image URL is not URL Pattern");
-//             return;
-//        }
     }
 }

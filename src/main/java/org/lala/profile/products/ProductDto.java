@@ -19,8 +19,11 @@ public class ProductDto {
     private String introduce;
 
     @NotEmpty
-    private String[] tech;
+    private String[] techs;
 
-    private String imageUrl;
+    private String[] imageUrls;
+
+    private String descriptions;
+
     private String color;
 }
