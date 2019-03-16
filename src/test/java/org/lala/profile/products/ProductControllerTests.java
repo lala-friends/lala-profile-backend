@@ -1,17 +1,39 @@
 package org.lala.profile.products;
 
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.lala.profile.common.AbstractCommonTest;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.MediaTypes;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 public class ProductControllerTests extends AbstractCommonTest {
+
+    @Autowired
+    private ProductRepository productRepository;
+
+    @BeforeEach
+    void before() {
+        Product product_1001 = Product.builder()
+                .id(1001)
+                .name("1001 name" )
+                .introduce("1001 introduce")
+                .descriptions("1001 description")
+                .imageUrls(new String[] {})
+                .color("red")
+                .techs(new String[] {"java", "oracle"})
+                .build();
+
+        productRepository.save(product_1001);
+    }
 
     @Test
     @DisplayName("정상적으로 Product 를 저장하는 테스트")
@@ -20,7 +42,7 @@ public class ProductControllerTests extends AbstractCommonTest {
         ProductDto product = ProductDto.builder()
                 .name("lala profile")
                 .introduce("personal profile")
-                .imageUrls(new String[] {"https://www.google.com/url?sa=i&source=images&cd=&ved=2ahUKEwjem66J-dDgAhVQGKYKHVBKBTkQjRx6BAgBEAU&url=https%3A%2F%2Fwww.facebook.com%2Fkakaofriends%2F&psig=AOvVaw1nuQ1v4-gvK4Kac507Gl5o&ust=1550980050138484"})
+                .imageUrls(new String[]{"https://www.google.com/url?sa=i&source=images&cd=&ved=2ahUKEwjem66J-dDgAhVQGKYKHVBKBTkQjRx6BAgBEAU&url=https%3A%2F%2Fwww.facebook.com%2Fkakaofriends%2F&psig=AOvVaw1nuQ1v4-gvK4Kac507Gl5o&ust=1550980050138484"})
                 .techs(new String[]{"spring boot", "rest api", "react"})
                 .color("red")
                 .descriptions("this is ling text")
@@ -59,7 +81,7 @@ public class ProductControllerTests extends AbstractCommonTest {
         ProductDto productDto = ProductDto.builder()
                 .name("lala profile")
                 .introduce("personal profile")
-                .imageUrls(new String[] {"aaa"})
+                .imageUrls(new String[]{"aaa"}) // url 잘못입력
                 .techs(new String[]{"spring boot", "rest api", "react"})
                 .descriptions("this is long text")
                 .build();
@@ -73,6 +95,17 @@ public class ProductControllerTests extends AbstractCommonTest {
                 .andExpect(jsonPath("$[0].objectName").exists())
                 .andExpect(jsonPath("$[0].defaultMessage").exists())
                 .andExpect(jsonPath("$[0].code").exists())
+        ;
+    }
+
+    @Test
+    @DisplayName("정상적으로 모든 Product 를 조회한다.")
+    void findAllProduct() throws Exception {
+        this.mockMvc.perform(get("/products")
+                .contentType(MediaType.APPLICATION_JSON_UTF8))
+                .andDo(print())
+                .andExpect(status().isOk())
+
         ;
     }
 }

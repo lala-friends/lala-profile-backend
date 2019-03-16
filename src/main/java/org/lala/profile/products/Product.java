@@ -20,9 +20,9 @@ public class Product extends AbstractTimestampEntity {
     private Integer id;
     private String name;
     private String introduce;
+    private String descriptions;
     private String[] techs;
     private String[] imageUrls;
     private String color;
-    private String descriptions;
 
 }
