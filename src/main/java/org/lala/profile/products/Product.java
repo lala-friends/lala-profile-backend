@@ -6,6 +6,7 @@ import org.lala.profile.commons.AbstractTimestampEntity;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.OneToOne;
 
 @Builder
 @AllArgsConstructor
@@ -24,4 +25,7 @@ public class Product extends AbstractTimestampEntity {
     private String[] tech;
     private String imageUrl;
     private String color;
+
+    @OneToOne(mappedBy = "product")
+    private ProductDetail productDetail;
 }

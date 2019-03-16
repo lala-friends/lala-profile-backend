@@ -23,6 +23,9 @@ public class ProductControllerTests extends AbstractCommonTest {
     @Autowired
     ObjectMapper objectMapper;
 
+    @Autowired
+    ProductRepository productRepository;
+
     @Test
     @DisplayName("정상적으로 Product를 저장하는 테스트")
     void createProduct() throws Exception {
@@ -105,4 +108,5 @@ public class ProductControllerTests extends AbstractCommonTest {
                 .andExpect(jsonPath("$[0].code").exists())
         ;
     }
+
 }
