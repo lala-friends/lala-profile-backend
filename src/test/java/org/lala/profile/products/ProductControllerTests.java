@@ -1,6 +1,5 @@
 package org.lala.profile.products;
 
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -9,7 +8,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.MediaTypes;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.util.CollectionUtils;
 
+import java.util.List;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -23,16 +28,25 @@ public class ProductControllerTests extends AbstractCommonTest {
     @BeforeEach
     void before() {
         Product product_1001 = Product.builder()
-                .id(1001)
-                .name("1001 name" )
+                .name("1001 name")
                 .introduce("1001 introduce")
                 .descriptions("1001 description")
-                .imageUrls(new String[] {})
+                .imageUrls(new String[]{})
                 .color("red")
-                .techs(new String[] {"java", "oracle"})
+                .techs(new String[]{"java", "oracle"})
+                .build();
+
+        Product product_1002 = Product.builder()
+                .name("1002 name")
+                .introduce("1002 introduce")
+                .descriptions("1002 description")
+                .imageUrls(new String[]{})
+                .color("blue")
+                .techs(new String[]{"python", "mysql"})
                 .build();
 
         productRepository.save(product_1001);
+        productRepository.save(product_1002);
     }
 
     @Test
@@ -101,11 +115,13 @@ public class ProductControllerTests extends AbstractCommonTest {
     @Test
     @DisplayName("정상적으로 모든 Product 를 조회한다.")
     void findAllProduct() throws Exception {
-        this.mockMvc.perform(get("/products")
+        MvcResult mvcResult = this.mockMvc.perform(get("/products")
                 .contentType(MediaType.APPLICATION_JSON_UTF8))
                 .andDo(print())
                 .andExpect(status().isOk())
-
-        ;
+                .andReturn();
+        List<Product> allProductList = objectMapper.readValue(mvcResult.getResponse().getContentAsString(), List.class);
+        assertFalse(CollectionUtils.isEmpty(allProductList), "allProductList is not empty");
+        assertThat(allProductList.size()).isEqualTo(2);
     }
 }
