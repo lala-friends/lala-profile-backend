@@ -1,11 +1,13 @@
 package org.lala.profile.products;
 
 import lombok.*;
+import org.lala.profile.accounts.Account;
 import org.lala.profile.commons.AbstractTimestampEntity;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 
 @Builder
 @AllArgsConstructor
@@ -25,4 +27,6 @@ public class Product extends AbstractTimestampEntity {
     private String[] imageUrls;
     private String color;
 
+    @ManyToOne
+    private Account owner;
 }
