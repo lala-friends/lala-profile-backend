@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.Set;
 
@@ -19,7 +20,7 @@ class AccountsServiceTest extends AbstractCommonTest {
     private AccountsService accountsService;
 
     @Autowired
-    private AccountsRepository accountsRepository;
+    private PasswordEncoder passwordEncoder;
 
     @Test
     @DisplayName("Accounts Service 에서 Username 을 찾는다.")
@@ -32,14 +33,15 @@ class AccountsServiceTest extends AbstractCommonTest {
                 .password(password)
                 .roles(Set.of(AccountRole.ADMIN, AccountRole.USER))
                 .build();
-        accountsRepository.save(account);
+        accountsService.saveAccount(account);
 
         // When
         UserDetailsService userDetailsService = accountsService;
         UserDetails userDetails = userDetailsService.loadUserByUsername(email);
 
         // Then
-        assertThat(userDetails.getPassword()).isEqualTo(password);
+        assertThat(passwordEncoder.matches(password, userDetails.getPassword())).isTrue();
+
     }
 
     @Test
