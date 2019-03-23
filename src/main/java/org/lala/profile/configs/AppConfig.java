@@ -3,7 +3,9 @@ package org.lala.profile.configs;
 import org.apache.commons.validator.routines.UrlValidator;
 import org.lala.profile.accounts.Account;
 import org.lala.profile.accounts.AccountRole;
+import org.lala.profile.accounts.AccountsRepository;
 import org.lala.profile.accounts.AccountsService;
+import org.lala.profile.commons.AppProperties;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
@@ -39,14 +41,25 @@ public class AppConfig {
             @Autowired
             AccountsService accountsService;
 
+            @Autowired
+            AppProperties appProperties;
+
             @Override
             public void run(ApplicationArguments args) throws Exception {
-                Account account = Account.builder()
-                        .email("whuk@naver.com")
-                        .password("fkfkvmfpswm")
+
+                Account admin = Account.builder()
+                        .email(appProperties.getAdminUsername())
+                        .password(appProperties.getAdminPassword())
                         .roles(Set.of(AccountRole.ADMIN, AccountRole.USER))
                         .build();
-                accountsService.saveAccount(account);
+                accountsService.saveAccount(admin);
+
+                Account user = Account.builder()
+                        .email(appProperties.getUserUsername())
+                        .password(appProperties.getUserPassword())
+                        .roles(Set.of(AccountRole.USER))
+                        .build();
+                accountsService.saveAccount(user);
 
             }
         };

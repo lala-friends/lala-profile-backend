@@ -4,6 +4,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.lala.profile.common.AbstractCommonTest;
+import org.lala.profile.commons.AppProperties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.MediaTypes;
 import org.springframework.http.HttpHeaders;
@@ -15,7 +16,6 @@ import org.springframework.util.CollectionUtils;
 
 import java.util.List;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.httpBasic;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -27,6 +27,9 @@ public class ProductControllerTests extends AbstractCommonTest {
 
     @Autowired
     private ProductRepository productRepository;
+
+    @Autowired
+    private AppProperties appProperties;
 
     @BeforeEach
     void before() {
@@ -81,16 +84,11 @@ public class ProductControllerTests extends AbstractCommonTest {
     }
 
     private String getToken() throws Exception {
-        String username = "whuk@naver.com";
-        String password = "fkfkvmfpswm";
-
-        String clientId = "lala-profile-client";
-        String clientSecret = "lala-profile-secret";
 
         ResultActions perform = this.mockMvc.perform(post("/oauth/token")
-                .with(httpBasic(clientId, clientSecret))
-                .param("username", username)
-                .param("password", password)
+                .with(httpBasic(appProperties.getClientId(), appProperties.getClientSecret()))
+                .param("username", appProperties.getAdminUsername())
+                .param("password", appProperties.getAdminPassword())
                 .param("grant_type", "password")
         );
         var responseBody = perform.andReturn().getResponse().getContentAsString();
