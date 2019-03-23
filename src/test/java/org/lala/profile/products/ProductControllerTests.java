@@ -8,13 +8,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.MediaTypes;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.security.oauth2.common.util.Jackson2JsonParser;
 import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.util.CollectionUtils;
 
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.httpBasic;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -62,7 +65,8 @@ public class ProductControllerTests extends AbstractCommonTest {
                 .descriptions("this is ling text")
                 .build();
 
-        mockMvc.perform(post("/products")
+        mockMvc.perform(post("/api/products")
+                .header(HttpHeaders.AUTHORIZATION, getBearerToken())
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .accept(MediaTypes.HAL_JSON)
                 .content(objectMapper.writeValueAsString(product))
@@ -76,17 +80,40 @@ public class ProductControllerTests extends AbstractCommonTest {
         ;
     }
 
+    private String getToken() throws Exception {
+        String username = "whuk@naver.com";
+        String password = "fkfkvmfpswm";
+
+        String clientId = "lala-profile-client";
+        String clientSecret = "lala-profile-secret";
+
+        ResultActions perform = this.mockMvc.perform(post("/oauth/token")
+                .with(httpBasic(clientId, clientSecret))
+                .param("username", username)
+                .param("password", password)
+                .param("grant_type", "password")
+        );
+        var responseBody = perform.andReturn().getResponse().getContentAsString();
+        Jackson2JsonParser jackson2JsonParser = new Jackson2JsonParser();
+        return jackson2JsonParser.parseMap(responseBody).get("access_token").toString();
+    }
+
     @Test
     @DisplayName("필수 입력값이 없는 경우 에러가 발생")
     void given_null_essential_value_when_createProduct_Bad_Request_Empty_Input() throws Exception {
         ProductDto productDto = ProductDto.builder()
                 .build();
 
-        this.mockMvc.perform(post("/products")
+        this.mockMvc.perform(post("/api/products")
+                .header(HttpHeaders.AUTHORIZATION, getBearerToken())
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .content(objectMapper.writeValueAsString(productDto))
         )
                 .andExpect(status().isBadRequest());
+    }
+
+    private String getBearerToken() throws Exception {
+        return "Bearer " + getToken();
     }
 
     @Test
@@ -100,7 +127,8 @@ public class ProductControllerTests extends AbstractCommonTest {
                 .descriptions("this is long text")
                 .build();
 
-        this.mockMvc.perform(post("/products")
+        this.mockMvc.perform(post("/api/products")
+                .header(HttpHeaders.AUTHORIZATION, getBearerToken())
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .content(objectMapper.writeValueAsString(productDto))
         )
@@ -115,13 +143,12 @@ public class ProductControllerTests extends AbstractCommonTest {
     @Test
     @DisplayName("정상적으로 모든 Product 를 조회한다.")
     void findAllProduct() throws Exception {
-        MvcResult mvcResult = this.mockMvc.perform(get("/products")
+        MvcResult mvcResult = this.mockMvc.perform(get("/api/products")
                 .contentType(MediaType.APPLICATION_JSON_UTF8))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andReturn();
         List<Product> allProductList = objectMapper.readValue(mvcResult.getResponse().getContentAsString(), List.class);
         assertFalse(CollectionUtils.isEmpty(allProductList), "allProductList is not empty");
-        assertThat(allProductList.size()).isEqualTo(2);
     }
 }
