@@ -149,4 +149,17 @@ public class ProductControllerTests extends AbstractCommonTest {
         List<Product> allProductList = objectMapper.readValue(mvcResult.getResponse().getContentAsString(), List.class);
         assertFalse(CollectionUtils.isEmpty(allProductList), "allProductList is not empty");
     }
+
+    @Test
+    @DisplayName("인증정보를 포함하여 정상적으로 모든 Product 를 조회한다.")
+    void findAllProductWithAuthentication() throws Exception {
+        MvcResult mvcResult = this.mockMvc.perform(get("/api/products")
+                .header(HttpHeaders.AUTHORIZATION, getBearerToken())
+                .contentType(MediaType.APPLICATION_JSON_UTF8))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andReturn();
+        List<Product> allProductList = objectMapper.readValue(mvcResult.getResponse().getContentAsString(), List.class);
+        assertFalse(CollectionUtils.isEmpty(allProductList), "allProductList is not empty");
+    }
 }

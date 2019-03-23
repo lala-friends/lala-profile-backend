@@ -1,8 +1,12 @@
 package org.lala.profile.products;
 
+import org.lala.profile.accounts.Account;
+import org.lala.profile.accounts.AccountAdapter;
+import org.lala.profile.accounts.CurrentUser;
 import org.modelmapper.ModelMapper;
 import org.springframework.hateoas.MediaTypes;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -32,7 +36,8 @@ public class ProductController {
     }
 
     @PostMapping
-    public ResponseEntity createProduct(@RequestBody @Valid ProductDto productDto, Errors errors) {
+    public ResponseEntity createProduct(@RequestBody @Valid ProductDto productDto, Errors errors
+            , @CurrentUser Account currentUser) {
 
         if (errors.hasErrors()) {
             return ResponseEntity.badRequest().body(errors);
@@ -45,6 +50,7 @@ public class ProductController {
         }
 
         Product product = modelMapper.map(productDto, Product.class);
+        product.setOwner(currentUser);
         Product newProduct = this.productRepository.save(product);
 
         URI createUri = linkTo(ProductController.class).slash(newProduct.getId()).toUri();
