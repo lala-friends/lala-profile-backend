@@ -1,10 +1,9 @@
-package org.lala.profile.products;
+package org.lala.profile.products.vo;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.*;
-import org.lala.profile.accounts.Account;
-import org.lala.profile.accounts.AccountAdapter;
-import org.lala.profile.accounts.AccountSerializer;
+import org.lala.profile.accounts.vo.Account;
+import org.lala.profile.accounts.config.AccountSerializer;
 import org.lala.profile.commons.AbstractTimestampEntity;
 
 import javax.persistence.Entity;

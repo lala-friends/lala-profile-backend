@@ -1,5 +1,7 @@
-package org.lala.profile.accounts;
+package org.lala.profile.accounts.config;
 
+import org.lala.profile.accounts.vo.Account;
+import org.lala.profile.accounts.vo.AccountRole;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;

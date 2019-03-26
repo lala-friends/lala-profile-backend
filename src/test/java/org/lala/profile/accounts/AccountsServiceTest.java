@@ -2,6 +2,9 @@ package org.lala.profile.accounts;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.lala.profile.accounts.service.AccountsService;
+import org.lala.profile.accounts.vo.Account;
+import org.lala.profile.accounts.vo.AccountRole;
 import org.lala.profile.common.AbstractCommonTest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;

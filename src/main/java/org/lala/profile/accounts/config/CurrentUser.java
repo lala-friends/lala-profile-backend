@@ -1,4 +1,4 @@
-package org.lala.profile.accounts;
+package org.lala.profile.accounts.config;
 
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 

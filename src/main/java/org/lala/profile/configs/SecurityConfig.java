@@ -1,6 +1,6 @@
 package org.lala.profile.configs;
 
-import org.lala.profile.accounts.AccountsService;
+import org.lala.profile.accounts.service.AccountsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;

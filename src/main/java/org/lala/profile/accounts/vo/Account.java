@@ -1,4 +1,4 @@
-package org.lala.profile.accounts;
+package org.lala.profile.accounts.vo;
 
 import lombok.*;
 

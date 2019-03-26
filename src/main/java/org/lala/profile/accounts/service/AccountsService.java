@@ -1,5 +1,8 @@
-package org.lala.profile.accounts;
+package org.lala.profile.accounts.service;
 
+import org.lala.profile.accounts.config.AccountAdapter;
+import org.lala.profile.accounts.repository.AccountsRepository;
+import org.lala.profile.accounts.vo.Account;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

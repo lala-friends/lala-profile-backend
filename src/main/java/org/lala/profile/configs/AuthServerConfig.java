@@ -1,6 +1,6 @@
 package org.lala.profile.configs;
 
-import org.lala.profile.accounts.AccountsService;
+import org.lala.profile.accounts.service.AccountsService;
 import org.lala.profile.commons.AppProperties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;

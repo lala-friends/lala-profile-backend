@@ -1,12 +1,13 @@
-package org.lala.profile.products;
+package org.lala.profile.products.web;
 
-import org.lala.profile.accounts.Account;
-import org.lala.profile.accounts.AccountAdapter;
-import org.lala.profile.accounts.CurrentUser;
+import org.lala.profile.accounts.vo.Account;
+import org.lala.profile.accounts.config.CurrentUser;
+import org.lala.profile.products.vo.ProductDto;
+import org.lala.profile.products.repository.ProductRepository;
+import org.lala.profile.products.vo.Product;
 import org.modelmapper.ModelMapper;
 import org.springframework.hateoas.MediaTypes;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.GetMapping;

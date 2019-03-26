@@ -1,10 +1,9 @@
 package org.lala.profile.configs;
 
 import org.apache.commons.validator.routines.UrlValidator;
-import org.lala.profile.accounts.Account;
-import org.lala.profile.accounts.AccountRole;
-import org.lala.profile.accounts.AccountsRepository;
-import org.lala.profile.accounts.AccountsService;
+import org.lala.profile.accounts.vo.Account;
+import org.lala.profile.accounts.vo.AccountRole;
+import org.lala.profile.accounts.service.AccountsService;
 import org.lala.profile.commons.AppProperties;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
