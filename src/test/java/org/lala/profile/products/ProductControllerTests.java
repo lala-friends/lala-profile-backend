@@ -4,7 +4,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.lala.profile.common.AbstractCommonTest;
-import org.lala.profile.commons.AppProperties;
 import org.lala.profile.products.repository.ProductRepository;
 import org.lala.profile.products.vo.Product;
 import org.lala.profile.products.vo.ProductDto;
@@ -12,15 +11,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.MediaTypes;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
-import org.springframework.security.oauth2.common.util.Jackson2JsonParser;
 import org.springframework.test.web.servlet.MvcResult;
-import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.util.CollectionUtils;
 
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.httpBasic;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -31,8 +27,6 @@ public class ProductControllerTests extends AbstractCommonTest {
     @Autowired
     private ProductRepository productRepository;
 
-    @Autowired
-    private AppProperties appProperties;
 
     @BeforeEach
     void before() {
@@ -86,19 +80,6 @@ public class ProductControllerTests extends AbstractCommonTest {
         ;
     }
 
-    private String getToken() throws Exception {
-
-        ResultActions perform = this.mockMvc.perform(post("/oauth/token")
-                .with(httpBasic(appProperties.getClientId(), appProperties.getClientSecret()))
-                .param("username", appProperties.getAdminUsername())
-                .param("password", appProperties.getAdminPassword())
-                .param("grant_type", "password")
-        );
-        var responseBody = perform.andReturn().getResponse().getContentAsString();
-        Jackson2JsonParser jackson2JsonParser = new Jackson2JsonParser();
-        return jackson2JsonParser.parseMap(responseBody).get("access_token").toString();
-    }
-
     @Test
     @DisplayName("필수 입력값이 없는 경우 에러가 발생")
     void given_null_essential_value_when_createProduct_Bad_Request_Empty_Input() throws Exception {
@@ -111,10 +92,6 @@ public class ProductControllerTests extends AbstractCommonTest {
                 .content(objectMapper.writeValueAsString(productDto))
         )
                 .andExpect(status().isBadRequest());
-    }
-
-    private String getBearerToken() throws Exception {
-        return "Bearer " + getToken();
     }
 
     @Test
