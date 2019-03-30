@@ -7,6 +7,7 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.E
 import org.springframework.security.oauth2.config.annotation.web.configuration.ResourceServerConfigurerAdapter;
 import org.springframework.security.oauth2.config.annotation.web.configurers.ResourceServerSecurityConfigurer;
 import org.springframework.security.oauth2.provider.error.OAuth2AccessDeniedHandler;
+import org.springframework.web.cors.CorsUtils;
 
 @Configuration
 @EnableResourceServer
@@ -23,10 +24,13 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
                 .anonymous()
                     .and()
                 .authorizeRequests()
+                    .requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
                     .mvcMatchers(HttpMethod.GET, "/api/**")
                         .permitAll()
                     .anyRequest()
                         .authenticated()
+                    .and()
+                        .cors()
                     .and()
                 .exceptionHandling()
                     .accessDeniedHandler(new OAuth2AccessDeniedHandler());
