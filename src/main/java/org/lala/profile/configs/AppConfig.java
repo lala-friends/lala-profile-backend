@@ -5,6 +5,8 @@ import org.lala.profile.accounts.vo.Account;
 import org.lala.profile.accounts.vo.AccountRole;
 import org.lala.profile.accounts.service.AccountsService;
 import org.lala.profile.commons.AppProperties;
+import org.lala.profile.person.repository.PersonRepository;
+import org.lala.profile.person.vo.Person;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
@@ -43,6 +45,9 @@ public class AppConfig {
             @Autowired
             AppProperties appProperties;
 
+            @Autowired
+            PersonRepository personRepository;
+
             @Override
             public void run(ApplicationArguments args) throws Exception {
 
@@ -53,6 +58,11 @@ public class AppConfig {
                         .build();
                 accountsService.saveAccount(admin);
 
+                Person adminPerson = Person.builder()
+                        .email(appProperties.getAdminUsername())
+                        .build();
+                personRepository.save(adminPerson);
+
                 Account user = Account.builder()
                         .email(appProperties.getUserUsername())
                         .password(appProperties.getUserPassword())
@@ -60,6 +70,11 @@ public class AppConfig {
                         .roles(Set.of(AccountRole.ADMIN, AccountRole.USER))
                         .build();
                 accountsService.saveAccount(user);
+
+                Person userPerson = Person.builder()
+                        .email(appProperties.getUserUsername())
+                        .build();
+                personRepository.save(userPerson);
 
             }
         };
