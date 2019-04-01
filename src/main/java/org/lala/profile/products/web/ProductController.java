@@ -55,8 +55,7 @@ public class ProductController {
         Product newProduct = this.productRepository.save(product);
 
         URI createUri = linkTo(ProductController.class).slash(newProduct.getId()).toUri();
-        product.setId(10);
-        return ResponseEntity.created(createUri).body(product);
+        return ResponseEntity.created(createUri).body(newProduct);
     }
 
     @GetMapping
