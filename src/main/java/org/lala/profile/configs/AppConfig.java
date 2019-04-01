@@ -56,7 +56,8 @@ public class AppConfig {
                 Account user = Account.builder()
                         .email(appProperties.getUserUsername())
                         .password(appProperties.getUserPassword())
-                        .roles(Set.of(AccountRole.USER))
+//                        .roles(Set.of(AccountRole.USER))
+                        .roles(Set.of(AccountRole.ADMIN, AccountRole.USER))
                         .build();
                 accountsService.saveAccount(user);
 
