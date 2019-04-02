@@ -21,4 +21,5 @@ public class PersonDto {
     private String blog;
     private String github;
     private String facebook;
+    private String[] keywords;
 }

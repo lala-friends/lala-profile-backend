@@ -25,4 +25,6 @@ public class Person extends AbstractTimestampEntity {
     private String blog;
     private String github;
     private String facebook;
+    private String[] keywords;
+
 }
