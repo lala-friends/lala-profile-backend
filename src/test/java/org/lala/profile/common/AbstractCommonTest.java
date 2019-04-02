@@ -30,7 +30,7 @@ public class AbstractCommonTest {
     protected ObjectMapper objectMapper;
 
     @Autowired
-    private AppProperties appProperties;
+    public AppProperties appProperties;
 
     public String getBearerToken() throws Exception {
         return "Bearer " + getToken();
