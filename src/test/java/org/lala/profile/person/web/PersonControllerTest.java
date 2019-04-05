@@ -32,13 +32,13 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-public class PersonControllerTest extends AbstractCommonTest {
+class PersonControllerTest extends AbstractCommonTest {
 
     @Autowired
-    PersonRepository personRepository;
+    private PersonRepository personRepository;
 
     @Autowired
-    AccountsService accountsService;
+    private AccountsService accountsService;
 
     @BeforeEach
     void before() {
@@ -51,6 +51,7 @@ public class PersonControllerTest extends AbstractCommonTest {
                 .blog("https://ryanwoo.tistory.com/")
                 .github("https://github.com/whuk")
                 .facebook("https://www.facebook.com/profile.php?id=100001895042867")
+                .keywords(new String[] {"IU", "Girls Generation"})
                 .build();
 
         personRepository.save(person);
@@ -71,7 +72,7 @@ public class PersonControllerTest extends AbstractCommonTest {
                 .andExpect(status().isOk())
                 .andReturn();
 
-        List<Person> personList = objectMapper.readValue(mvcResult.getResponse().getContentAsString(), List.class);
+        List personList = objectMapper.readValue(mvcResult.getResponse().getContentAsString(), List.class);
         assertFalse(CollectionUtils.isEmpty(personList), "PersonList is not empty");
     }
 
@@ -84,7 +85,7 @@ public class PersonControllerTest extends AbstractCommonTest {
                 .andExpect(status().isOk())
                 .andReturn();
 
-        List<Person> personList = objectMapper.readValue(mvcResult.getResponse().getContentAsString(), List.class);
+        List personList = objectMapper.readValue(mvcResult.getResponse().getContentAsString(), List.class);
         assertFalse(CollectionUtils.isEmpty(personList), "PersonList is not empty");
     }
 
@@ -168,6 +169,7 @@ public class PersonControllerTest extends AbstractCommonTest {
                 .github("https://github.com/apeach")
                 .repColor("pink")
                 .imageUrl("https://www.google.com/url?sa=i&source=images&cd=&cad=rja&uact=8&ved=2ahUKEwjtlMfd-q7hAhWCE7wKHWXIDhAQjRx6BAgBEAU&url=https%3A%2F%2Ftenor.com%2Fsearch%2Fapeach-gifs&psig=AOvVaw3kpGNU7k9x8f3MlytpYlha&ust=1554210311145409")
+                .keywords(new String[] {"In the air", "k8s"})
                 .build();
 
         // 테스트용 계정의 토큰
