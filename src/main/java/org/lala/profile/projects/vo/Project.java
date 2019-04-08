@@ -1,11 +1,12 @@
 package org.lala.profile.projects.vo;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.*;
+import org.lala.profile.accounts.config.AccountSerializer;
+import org.lala.profile.accounts.vo.Account;
+import org.lala.profile.commons.AbstractTimestampEntity;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.util.Date;
 
 @Builder
@@ -14,7 +15,7 @@ import java.util.Date;
 @Getter
 @Setter
 @Entity
-public class Project {
+public class Project extends AbstractTimestampEntity {
 
     @Id
     @GeneratedValue
@@ -35,4 +36,8 @@ public class Project {
     private String personalRole;
 
     private String link;
+
+    @ManyToOne
+    @JsonSerialize(using = AccountSerializer.class)
+    private Account owner;
 }
