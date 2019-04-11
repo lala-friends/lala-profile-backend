@@ -27,13 +27,12 @@ public class ProductControllerTests extends AbstractCommonTest {
     @Autowired
     private ProductRepository productRepository;
 
-
     @BeforeEach
     void before() {
         Product product_1001 = Product.builder()
                 .name("1001 name")
                 .introduce("1001 introduce")
-                .descriptions("1001 description")
+                .description("1001 description")
                 .imageUrls(new String[]{})
                 .color("red")
                 .techs(new String[]{"java", "oracle"})
@@ -42,7 +41,7 @@ public class ProductControllerTests extends AbstractCommonTest {
         Product product_1002 = Product.builder()
                 .name("1002 name")
                 .introduce("1002 introduce")
-                .descriptions("1002 description")
+                .description("1002 description")
                 .imageUrls(new String[]{})
                 .color("blue")
                 .techs(new String[]{"python", "mysql"})
@@ -62,7 +61,7 @@ public class ProductControllerTests extends AbstractCommonTest {
                 .imageUrls(new String[]{"https://www.google.com/url?sa=i&source=images&cd=&ved=2ahUKEwjem66J-dDgAhVQGKYKHVBKBTkQjRx6BAgBEAU&url=https%3A%2F%2Fwww.facebook.com%2Fkakaofriends%2F&psig=AOvVaw1nuQ1v4-gvK4Kac507Gl5o&ust=1550980050138484"})
                 .techs(new String[]{"spring boot", "rest api", "react"})
                 .color("red")
-                .descriptions("this is ling text")
+                .description("this is ling text")
                 .build();
 
         mockMvc.perform(post("/api/products")
@@ -102,7 +101,7 @@ public class ProductControllerTests extends AbstractCommonTest {
                 .introduce("personal profile")
                 .imageUrls(new String[]{"aaa"}) // url 잘못입력
                 .techs(new String[]{"spring boot", "rest api", "react"})
-                .descriptions("this is long text")
+                .description("this is long text")
                 .build();
 
         this.mockMvc.perform(post("/api/products")
