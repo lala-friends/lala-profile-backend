@@ -15,6 +15,8 @@ public class ProductDto {
     @NotEmpty
     private String name;
 
+    private String repImageUrl;
+
     @NotEmpty
     private String introduce;
 
@@ -23,7 +25,7 @@ public class ProductDto {
 
     private String[] imageUrls;
 
-    private String descriptions;
+    private String description;
 
     private String color;
 }
