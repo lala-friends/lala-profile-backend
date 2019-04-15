@@ -1,5 +1,6 @@
 package org.lala.profile.products;
 
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -49,6 +50,11 @@ public class ProductControllerTests extends AbstractCommonTest {
 
         productRepository.save(product_1001);
         productRepository.save(product_1002);
+    }
+
+    @AfterEach
+    void after() {
+        productRepository.deleteAll();
     }
 
     @Test
