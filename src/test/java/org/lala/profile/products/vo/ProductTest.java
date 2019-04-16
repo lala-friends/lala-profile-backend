@@ -1,10 +1,9 @@
-package org.lala.profile.products;
+package org.lala.profile.products.vo;
 
 import junitparams.JUnitParamsRunner;
 import junitparams.Parameters;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.lala.profile.products.vo.Product;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

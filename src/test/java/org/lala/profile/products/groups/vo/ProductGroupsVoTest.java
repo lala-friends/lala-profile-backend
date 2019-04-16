@@ -1,4 +1,4 @@
-package org.lala.profile.groups.vo;
+package org.lala.profile.products.groups.vo;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -15,7 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-public class GroupsVoTest extends AbstractCommonTest {
+public class ProductGroupsVoTest extends AbstractCommonTest {
 
     @Autowired
     private ProductRepository productRepository;
@@ -61,13 +61,13 @@ public class GroupsVoTest extends AbstractCommonTest {
     }
 
     @Test
-    @DisplayName("Groups 빌더 테스트")
+    @DisplayName("ProductGroups 빌더 테스트")
     public void builder() {
 
         Product product1 = productRepository.findAll().get(0);
         Person person1 = personRepository.findAll().get(0);
 
-        Groups groups = Groups.builder()
+        ProductGroups groups = ProductGroups.builder()
                 .person(person1)
                 .product(product1)
                 .isProductOn(true)

@@ -1,4 +1,4 @@
-package org.lala.profile.groups.vo;
+package org.lala.profile.products.groups.vo;
 
 import lombok.*;
 import org.lala.profile.person.vo.Person;
@@ -12,7 +12,7 @@ import javax.persistence.*;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Groups {
+public class ProductGroups {
 
     @Id
     @GeneratedValue
