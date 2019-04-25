@@ -1,11 +1,8 @@
 package org.lala.profile.products.vo;
 
 import lombok.*;
-import org.lala.profile.accounts.vo.Account;
-import org.lala.profile.products.groups.vo.ProductGroups;
 
 import javax.validation.constraints.NotEmpty;
-import java.util.List;
 
 @Data
 @Builder
@@ -31,6 +28,4 @@ public class ProductDto {
     private String description;
 
     private String color;
-
-    private Account owner;
 }
