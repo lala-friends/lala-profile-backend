@@ -94,4 +94,6 @@ public class ProjectControllerTest extends AbstractCommonTest {
         List<Project> allProjectList = objectMapper.readValue(mvcResult.getResponse().getContentAsString(), List.class);
         assertFalse(CollectionUtils.isEmpty(allProjectList), "allProjectList is not empty");
     }
+
+
 }

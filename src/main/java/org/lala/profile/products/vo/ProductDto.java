@@ -33,6 +33,4 @@ public class ProductDto {
     private String color;
 
     private Account owner;
-
-    private List<ProductGroups> productGroups;
 }
