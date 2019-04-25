@@ -1,4 +1,4 @@
-package org.lala.profile.products;
+package org.lala.profile.products.web;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;

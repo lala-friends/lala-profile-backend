@@ -7,6 +7,8 @@ import org.lala.profile.accounts.vo.AccountRole;
 import org.lala.profile.person.repository.PersonRepository;
 import org.lala.profile.person.vo.Person;
 import org.lala.profile.person.vo.PersonDto;
+import org.lala.profile.products.groups.service.ProductGroupService;
+import org.lala.profile.products.vo.Product;
 import org.modelmapper.ModelMapper;
 import org.springframework.hateoas.MediaTypes;
 import org.springframework.http.HttpStatus;
@@ -16,6 +18,7 @@ import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 import java.util.Optional;
 
 @Controller
@@ -24,16 +27,31 @@ public class PersonController {
 
     private PersonRepository personRepository;
 
+    private ProductGroupService productGroupService;
+
     private ModelMapper modelMapper;
 
-    public PersonController(PersonRepository personRepository, ModelMapper modelMapper) {
+    public PersonController(PersonRepository personRepository, ProductGroupService productGroupService, ModelMapper modelMapper) {
         this.personRepository = personRepository;
+        this.productGroupService = productGroupService;
         this.modelMapper = modelMapper;
     }
 
     @GetMapping
     public ResponseEntity getAllPersons() {
         return ResponseEntity.ok(personRepository.findAll());
+    }
+
+    @GetMapping(value = "/{email}/products")
+    public ResponseEntity getAllProductsByPerson(@PathVariable String email, @CurrentUser Account currentUser) {
+        if (EmailValidator.getInstance().isValid(email)) {
+            if (currentUser == null) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+            }
+            return ResponseEntity.ok(productGroupService.getProductsByEmail(email));
+        } else {
+            return ResponseEntity.badRequest().build();
+        }
     }
 
     @GetMapping(value = "/{email}")

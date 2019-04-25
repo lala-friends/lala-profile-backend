@@ -10,9 +10,9 @@ import org.lala.profile.products.vo.Product;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
-import java.util.Collections;
+import java.util.List;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @DataJpaTest
 public class ProductGroupsRepositoryTest {
@@ -55,15 +55,24 @@ public class ProductGroupsRepositoryTest {
                 .person(person)
                 .product(product_1003)
                 .build();
-        product_1003.setProductGroups(Collections.singletonList(productGroups));
-
-        // 이시점의 Person 의 ProductGroups 의 id == null
-        Product getProductBeforeSave = productRepository.findAll().get(0);
-        assertThat(getProductBeforeSave.getProductGroups().get(0).getId()).isNull();
 
         productGroupsRepository.save(productGroups);
+
+        List<ProductGroups> productGroupsList = productGroupsRepository.findByPerson(person).orElseThrow(() -> new RuntimeException("productGroupsList must not null!!"));
+        assertNotNull(productGroupsList);
+        assertNotNull(productGroupsList.get(0).getId());
+
+
+        // 단방향 연결로 변경 - 양방향인경우 무한루프
+//        product_1003.setProductGroups(Collections.singletonList(productGroups));
+
+        // 이시점의 Person 의 ProductGroups 의 id == null
+//        Product getProductBeforeSave = productRepository.findAll().get(0);
+//        assertThat(getProductBeforeSave.getProductGroups().get(0).getId()).isNull();
+
+//        productGroupsRepository.save(productGroups);
         // productGroups 를 save 하는 시점에 relation 매핑
-        Product getProductAfterSave = productRepository.findAll().get(0);
-        assertThat(getProductAfterSave.getProductGroups().get(0).getId()).isNotNull();
+//        Product getProductAfterSave = productRepository.findAll().get(0);
+//        assertThat(getProductAfterSave.getProductGroups().get(0).getId()).isNotNull();
     }
 }

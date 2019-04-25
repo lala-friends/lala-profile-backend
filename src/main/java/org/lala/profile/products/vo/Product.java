@@ -32,7 +32,4 @@ public class Product extends AbstractTimestampEntity {
     @ManyToOne
     @JsonSerialize(using = AccountSerializer.class)
     private Account owner;
-
-    @OneToMany(mappedBy = "product")
-    private List<ProductGroups> productGroups;
 }
