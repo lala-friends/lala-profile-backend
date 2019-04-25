@@ -20,7 +20,6 @@ public class ProductDto {
     @NotEmpty
     private String introduce;
 
-    @NotEmpty
     private String[] techs;
 
     private String[] imageUrls;

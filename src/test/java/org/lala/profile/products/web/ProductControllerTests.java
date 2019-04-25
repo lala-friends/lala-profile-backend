@@ -17,9 +17,9 @@ import org.springframework.util.CollectionUtils;
 
 import java.util.List;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -146,5 +146,41 @@ public class ProductControllerTests extends AbstractCommonTest {
                 .andReturn();
         List<Product> allProductList = objectMapper.readValue(mvcResult.getResponse().getContentAsString(), List.class);
         assertFalse(CollectionUtils.isEmpty(allProductList), "allProductList is not empty");
+    }
+
+    @Test
+    @DisplayName("인증정보를 포함하여 정상적으로 Product 를 수정한다.")
+    void given_oauth_when_putProduct_then_return_ok() throws Exception {
+        ProductDto product_2001 = ProductDto.builder()
+                .name("2001 name")
+                .introduce("2001 introduce")
+                .description("2001 description")
+                .imageUrls(new String[]{})
+                .color("grey")
+                .techs(new String[]{"python", "mysql", "power point"})
+                .build();
+
+        MvcResult result = mockMvc.perform(post("/api/products")
+                .header(HttpHeaders.AUTHORIZATION, getBearerToken())
+                .contentType(MediaType.APPLICATION_JSON_UTF8)
+                .accept(MediaTypes.HAL_JSON)
+                .content(objectMapper.writeValueAsString(product_2001)))
+                .andDo(print())
+                .andReturn();
+
+        Product targetProduct = objectMapper.readValue(result.getResponse().getContentAsString(), Product.class);
+        product_2001.setName("2001 name modify");
+        product_2001.setIntroduce("2001 introduce modify");
+        MvcResult result1 = mockMvc.perform(put("/api/products/" + targetProduct.getId())
+                .contentType(MediaType.APPLICATION_JSON_UTF8)
+                .header(HttpHeaders.AUTHORIZATION, getBearerToken())
+                .content(this.objectMapper.writeValueAsString(product_2001)))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andReturn();
+
+        Product modifiedProduct = objectMapper.readValue(result1.getResponse().getContentAsString(), Product.class);
+        assertThat(modifiedProduct.getName()).isEqualTo(product_2001.getName());
+        assertThat(modifiedProduct.getIntroduce()).isEqualTo(product_2001.getIntroduce());
     }
 }

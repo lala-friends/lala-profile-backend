@@ -5,10 +5,11 @@ import lombok.*;
 import org.lala.profile.accounts.config.AccountSerializer;
 import org.lala.profile.accounts.vo.Account;
 import org.lala.profile.commons.AbstractTimestampEntity;
-import org.lala.profile.products.groups.vo.ProductGroups;
 
-import javax.persistence.*;
-import java.util.List;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 
 @Builder
 @AllArgsConstructor

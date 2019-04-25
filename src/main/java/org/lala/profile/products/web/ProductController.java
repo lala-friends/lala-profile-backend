@@ -1,22 +1,22 @@
 package org.lala.profile.products.web;
 
-import org.lala.profile.accounts.vo.Account;
 import org.lala.profile.accounts.config.CurrentUser;
-import org.lala.profile.products.vo.ProductDto;
+import org.lala.profile.accounts.vo.Account;
+import org.lala.profile.accounts.vo.AccountRole;
 import org.lala.profile.products.repository.ProductRepository;
 import org.lala.profile.products.vo.Product;
+import org.lala.profile.products.vo.ProductDto;
 import org.modelmapper.ModelMapper;
 import org.springframework.hateoas.MediaTypes;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.Errors;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.net.URI;
+import java.util.Optional;
 
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
 
@@ -61,5 +61,27 @@ public class ProductController {
     @GetMapping
     public ResponseEntity getAllProduct() {
         return ResponseEntity.ok(productRepository.findAll());
+    }
+
+    @PutMapping(value = "/{id}")
+    public ResponseEntity modifyProduct(@PathVariable Integer id, @RequestBody @Valid ProductDto productDto, Errors errors
+            , @CurrentUser Account currentUser) {
+        Optional<Product> productOptional = productRepository.findById(id);
+        if (productOptional.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+
+        if (errors.hasErrors()) {
+            return ResponseEntity.badRequest().body(errors);
+        }
+
+        Product existsProduct = productOptional.get();
+        boolean isAdmin = currentUser.getRoles().stream().filter(r -> r.equals(AccountRole.ADMIN)).count() == 1 ? true : false;
+        if (!isAdmin && !existsProduct.getOwner().getEmail().equals(currentUser.getEmail())) {
+            return new ResponseEntity(HttpStatus.UNAUTHORIZED);
+        }
+        this.modelMapper.map(productDto, existsProduct);
+        Product savedProduct = productRepository.save(existsProduct);
+        return ResponseEntity.ok(savedProduct);
     }
 }
