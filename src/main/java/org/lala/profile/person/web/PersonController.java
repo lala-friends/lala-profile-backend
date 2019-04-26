@@ -9,6 +9,7 @@ import org.lala.profile.person.repository.PersonRepository;
 import org.lala.profile.person.vo.Person;
 import org.lala.profile.person.vo.PersonDto;
 import org.lala.profile.person.vo.PersonWithProjects;
+import org.lala.profile.person.vo.PersonWithProjectsDto;
 import org.lala.profile.products.groups.service.ProductGroupService;
 import org.lala.profile.projects.repository.ProjectRepository;
 import org.lala.profile.projects.vo.Project;
@@ -18,6 +19,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.CollectionUtils;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 
@@ -77,6 +79,50 @@ public class PersonController {
             personWithProjects.setProjects(projects);
 
             return ResponseEntity.ok(personWithProjects);
+        } else {
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
+    @PutMapping(value = "/{email}/projects")
+    public ResponseEntity modifyPersonAndProjects(@PathVariable String email,
+                                                  @RequestBody @Valid PersonWithProjectsDto personWithProjectsDto,
+                                                  Errors errors,
+                                                  @CurrentUser Account currentUser) {
+        if (EmailValidator.getInstance().isValid(email)) {
+            Person existsPerson = personRepository.findByEmail(email).orElseThrow(() -> new UsernameNotFoundException(email + "is not found!!"));
+            Account owner = accountsRepository.findByEmail(email).orElseThrow(() -> new UsernameNotFoundException(email + "is not found!!"));
+
+            // 권한체크
+            boolean isAdmin = currentUser.getRoles().stream().filter(r -> r.equals(AccountRole.ADMIN)).count() == 1 ? true : false;
+            if (!isAdmin && !currentUser.getEmail().equals(email)) {
+                return new ResponseEntity(HttpStatus.UNAUTHORIZED);
+            }
+
+            if (errors.hasErrors()) {
+                return ResponseEntity.badRequest().body(errors);
+            }
+
+            // person 먼저 수정
+            this.modelMapper.map(personWithProjectsDto, existsPerson);
+            personRepository.save(existsPerson);
+
+            // project 삭제 후 재등록
+            List<Project> savedProjects = null;
+            if (!CollectionUtils.isEmpty(personWithProjectsDto.getProjects())) {
+                projectRepository.deleteByOwner(owner);
+                savedProjects = new ArrayList<>();
+                for (Project p : personWithProjectsDto.getProjects()) {
+                    Project savedProject = projectRepository.save(p);
+                    savedProjects.add(savedProject);
+                }
+            }
+
+            PersonWithProjects savedObject = new PersonWithProjects();
+            this.modelMapper.map(existsPerson, savedObject);
+            savedObject.setProjects(savedProjects);
+
+            return ResponseEntity.ok(savedObject);
         } else {
             return ResponseEntity.badRequest().build();
         }
