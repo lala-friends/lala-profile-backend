@@ -45,9 +45,9 @@ public class PersonController {
     @GetMapping(value = "/{email}/products")
     public ResponseEntity getAllProductsByPerson(@PathVariable String email, @CurrentUser Account currentUser) {
         if (EmailValidator.getInstance().isValid(email)) {
-            if (currentUser == null) {
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-            }
+//            if (currentUser == null) {
+//                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+//            }
             return ResponseEntity.ok(productGroupService.getProductsByEmail(email));
         } else {
             return ResponseEntity.badRequest().build();
@@ -57,9 +57,9 @@ public class PersonController {
     @GetMapping(value = "/{email}")
     public ResponseEntity getPerson(@PathVariable String email, @CurrentUser Account currentUser) {
         if (EmailValidator.getInstance().isValid(email)) {
-            if (currentUser == null) {
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-            }
+//            if (currentUser == null) {
+//                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+//            }
             return ResponseEntity.ok(personRepository.findByEmail(email));
         } else {
             return ResponseEntity.badRequest().build();
