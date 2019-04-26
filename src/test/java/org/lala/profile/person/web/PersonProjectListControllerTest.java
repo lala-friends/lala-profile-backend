@@ -53,6 +53,8 @@ public class PersonProjectListControllerTest extends AbstractCommonTest {
 
     @BeforeEach
     void before() {
+        personRepository.deleteAll();
+
         String admin = appProperties.getAdminUsername();
         Account byEmail = accountsRepository.findByEmail(admin).orElseThrow(() -> new UsernameNotFoundException(admin));
 
@@ -97,6 +99,8 @@ public class PersonProjectListControllerTest extends AbstractCommonTest {
     @DisplayName("인증정보가 없는 상태로 e-mail 로 Person 을 조회하면 person 과 project list 가 리턴된다.")
     void given_person_email_with_no_oauth_when_getPersonWithProjectList_then_return_person_and_projectList() throws Exception {
         String email = appProperties.getAdminUsername();
+        Person adminPerson = Person.builder().email(email).build();
+        personRepository.save(adminPerson);
 
         MvcResult mvcResult = mockMvc.perform(get("/api/persons/" + email + "/projects")
 //                .header(HttpHeaders.AUTHORIZATION, getBearerToken())
@@ -119,7 +123,9 @@ public class PersonProjectListControllerTest extends AbstractCommonTest {
     void given_personId_with_oauth_putPersonWithProjectList_then_putPerson_and_reCreateProjects_return_200() throws Exception {
         String email = appProperties.getAdminUsername();
         Account admin = accountsRepository.findByEmail(email).orElseThrow(() -> new UsernameNotFoundException("admin account is not null!!"));
-        Person origin = personRepository.findByEmail(email).orElseThrow(() -> new UsernameNotFoundException("admin person is not null!!"));
+        Person origin = Person.builder().email(email).build();
+        personRepository.save(origin);
+//        Person origin = personRepository.findByEmail(email).orElseThrow(() -> new UsernameNotFoundException("admin person is not null!!"));
 
         PersonWithProjectsDto personWithProjectsDto = new PersonWithProjectsDto();
         this.modelMapper.map(origin, personWithProjectsDto);

@@ -70,11 +70,11 @@ public class PersonController {
     @GetMapping(value = "/{email}/projects")
     public ResponseEntity getAllProjectsByPerson(@PathVariable String email, @CurrentUser Account currentUser) {
         if (EmailValidator.getInstance().isValid(email)) {
-            Person byEmail = personRepository.findByEmail(email).orElseThrow(() -> new UsernameNotFoundException(email + "is not found!!"));
+            Person byEmail = personRepository.findByEmail(email).orElseThrow(() -> new UsernameNotFoundException(email + " is not found!!"));
             PersonWithProjects personWithProjects = new PersonWithProjects();
             modelMapper.map(byEmail, personWithProjects);
 
-            Account optionalAccount = accountsRepository.findByEmail(email).orElseThrow(() -> new UsernameNotFoundException(email + "is not found!!"));
+            Account optionalAccount = accountsRepository.findByEmail(email).orElseThrow(() -> new UsernameNotFoundException(email + " is not found!!"));
             List<Project> projects = projectRepository.findByOwner(optionalAccount).orElse(new ArrayList<>());
             personWithProjects.setProjects(projects);
 
