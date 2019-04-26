@@ -2,22 +2,27 @@ package org.lala.profile.person.web;
 
 import org.apache.commons.validator.routines.EmailValidator;
 import org.lala.profile.accounts.config.CurrentUser;
+import org.lala.profile.accounts.repository.AccountsRepository;
 import org.lala.profile.accounts.vo.Account;
 import org.lala.profile.accounts.vo.AccountRole;
 import org.lala.profile.person.repository.PersonRepository;
 import org.lala.profile.person.vo.Person;
 import org.lala.profile.person.vo.PersonDto;
+import org.lala.profile.person.vo.PersonWithProjects;
 import org.lala.profile.products.groups.service.ProductGroupService;
-import org.lala.profile.products.vo.Product;
+import org.lala.profile.projects.repository.ProjectRepository;
+import org.lala.profile.projects.vo.Project;
 import org.modelmapper.ModelMapper;
 import org.springframework.hateoas.MediaTypes;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -31,10 +36,16 @@ public class PersonController {
 
     private ModelMapper modelMapper;
 
-    public PersonController(PersonRepository personRepository, ProductGroupService productGroupService, ModelMapper modelMapper) {
+    private ProjectRepository projectRepository;
+
+    private AccountsRepository accountsRepository;
+
+    public PersonController(PersonRepository personRepository, ProductGroupService productGroupService, ModelMapper modelMapper, ProjectRepository projectRepository, AccountsRepository accountsRepository) {
         this.personRepository = personRepository;
         this.productGroupService = productGroupService;
         this.modelMapper = modelMapper;
+        this.projectRepository = projectRepository;
+        this.accountsRepository = accountsRepository;
     }
 
     @GetMapping
@@ -49,6 +60,23 @@ public class PersonController {
 //                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
 //            }
             return ResponseEntity.ok(productGroupService.getProductsByEmail(email));
+        } else {
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
+    @GetMapping(value = "/{email}/projects")
+    public ResponseEntity getAllProjectsByPerson(@PathVariable String email, @CurrentUser Account currentUser) {
+        if (EmailValidator.getInstance().isValid(email)) {
+            Person byEmail = personRepository.findByEmail(email).orElseThrow(() -> new UsernameNotFoundException(email + "is not found!!"));
+            PersonWithProjects personWithProjects = new PersonWithProjects();
+            modelMapper.map(byEmail, personWithProjects);
+
+            Account optionalAccount = accountsRepository.findByEmail(email).orElseThrow(() -> new UsernameNotFoundException(email + "is not found!!"));
+            List<Project> projects = projectRepository.findByOwner(optionalAccount).orElse(new ArrayList<>());
+            personWithProjects.setProjects(projects);
+
+            return ResponseEntity.ok(personWithProjects);
         } else {
             return ResponseEntity.badRequest().build();
         }
