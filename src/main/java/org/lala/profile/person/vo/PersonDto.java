@@ -14,7 +14,6 @@ public class PersonDto {
 
     @NotEmpty
     private String name;
-    @NotEmpty
     private String introduce;
     private String imageUrl;
     private String repColor;

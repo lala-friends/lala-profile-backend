@@ -17,7 +17,6 @@ public class ProductDto {
 
     private String repImageUrl;
 
-    @NotEmpty
     private String introduce;
 
     private String[] techs;
