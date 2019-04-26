@@ -110,14 +110,14 @@ class PersonControllerTest extends AbstractCommonTest {
     }
 
     @Test
-    @DisplayName("인증정보가 없는 상태로 e-mail 로 Person 을 조회하면 401 이 리턴된다.")
-    void given_person_email_with_no_oauth_when_getPerson_then_return_401() throws Exception {
+    @DisplayName("인증정보가 없는 상태로 e-mail 로 Person 을 조회하면 200 이 리턴된다.")
+    void given_person_email_with_no_oauth_when_getPerson_then_return_200() throws Exception {
         String email = "frodo@naver.com";
 
         mockMvc.perform(get("/api/persons/" + email)
                 .contentType(MediaType.APPLICATION_JSON_UTF8))
                 .andDo(print())
-                .andExpect(status().isUnauthorized())
+                .andExpect(status().isOk())
         ;
 
     }
