@@ -1,5 +1,6 @@
 package org.lala.profile.person.web;
 
+import org.junit.Ignore;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -147,49 +148,50 @@ class PersonControllerTest extends AbstractCommonTest {
         ;
     }
 
-    @Test
-    @DisplayName("인증정보가 있는 상태로 Person 을 수정하면 정상적으로 수정된다.")
-    void given_person_email_with_oauth_when_putPerson_then_return_200() throws Exception {
-        String email = "frodo@naver.com";
-        Person byEmail = personRepository.findByEmail(email).orElseThrow(() -> new UsernameNotFoundException(email));
-
-        Account account = Account.builder()
-                .email(email)
-                .password("1q2w3e4r%")
-                .roles(Set.of(AccountRole.ADMIN, AccountRole.USER))
-                .build();
-        accountsService.saveAccount(account);
-
-
-        PersonDto personDto = PersonDto.builder()
-                .name("apeach")
-                .introduce("peach peach apeach")
-                .blog("http://apeach.com")
-                .facebook("https://facebook.com/apeach")
-                .github("https://github.com/apeach")
-                .repColor("pink")
-                .imageUrl("https://www.google.com/url?sa=i&source=images&cd=&cad=rja&uact=8&ved=2ahUKEwjtlMfd-q7hAhWCE7wKHWXIDhAQjRx6BAgBEAU&url=https%3A%2F%2Ftenor.com%2Fsearch%2Fapeach-gifs&psig=AOvVaw3kpGNU7k9x8f3MlytpYlha&ust=1554210311145409")
-                .keywords(new String[] {"In the air", "k8s"})
-                .build();
-
-        // 테스트용 계정의 토큰
-        ResultActions perform = this.mockMvc.perform(post("/oauth/token")
-                .with(httpBasic(appProperties.getClientId(), appProperties.getClientSecret()))
-                .param("username", email)
-                .param("password", "1q2w3e4r%")
-                .param("grant_type", "password"));
-        var responseBody = perform.andReturn().getResponse().getContentAsString();
-        Jackson2JsonParser jackson2JsonParser = new Jackson2JsonParser();
-        String token ="Bearer " + jackson2JsonParser.parseMap(responseBody).get("access_token").toString();
-
-        mockMvc.perform(put("/api/persons/{id}" ,byEmail.getId())
-                .contentType(MediaType.APPLICATION_JSON_UTF8)
-                .header(HttpHeaders.AUTHORIZATION, token)
-                .content(this.objectMapper.writeValueAsString(personDto))
-        )
-                .andDo(print())
-                .andExpect(status().isOk())
-        ;
-    }
+    // 다른 API 로 대체
+//    @Test
+//    @DisplayName("인증정보가 있는 상태로 Person 을 수정하면 정상적으로 수정된다.")
+//    void given_person_email_with_oauth_when_putPerson_then_return_200() throws Exception {
+//        String email = "frodo@naver.com";
+//        Person byEmail = personRepository.findByEmail(email).orElseThrow(() -> new UsernameNotFoundException(email));
+//
+//        Account account = Account.builder()
+//                .email(email)
+//                .password("1q2w3e4r%")
+//                .roles(Set.of(AccountRole.ADMIN, AccountRole.USER))
+//                .build();
+//        accountsService.saveAccount(account);
+//
+//
+//        PersonDto personDto = PersonDto.builder()
+//                .name("apeach")
+//                .introduce("peach peach apeach")
+//                .blog("http://apeach.com")
+//                .facebook("https://facebook.com/apeach")
+//                .github("https://github.com/apeach")
+//                .repColor("pink")
+//                .imageUrl("https://www.google.com/url?sa=i&source=images&cd=&cad=rja&uact=8&ved=2ahUKEwjtlMfd-q7hAhWCE7wKHWXIDhAQjRx6BAgBEAU&url=https%3A%2F%2Ftenor.com%2Fsearch%2Fapeach-gifs&psig=AOvVaw3kpGNU7k9x8f3MlytpYlha&ust=1554210311145409")
+//                .keywords(new String[] {"In the air", "k8s"})
+//                .build();
+//
+//        // 테스트용 계정의 토큰
+//        ResultActions perform = this.mockMvc.perform(post("/oauth/token")
+//                .with(httpBasic(appProperties.getClientId(), appProperties.getClientSecret()))
+//                .param("username", email)
+//                .param("password", "1q2w3e4r%")
+//                .param("grant_type", "password"));
+//        var responseBody = perform.andReturn().getResponse().getContentAsString();
+//        Jackson2JsonParser jackson2JsonParser = new Jackson2JsonParser();
+//        String token ="Bearer " + jackson2JsonParser.parseMap(responseBody).get("access_token").toString();
+//
+//        mockMvc.perform(put("/api/persons/{id}" ,byEmail.getId())
+//                .contentType(MediaType.APPLICATION_JSON_UTF8)
+//                .header(HttpHeaders.AUTHORIZATION, token)
+//                .content(this.objectMapper.writeValueAsString(personDto))
+//        )
+//                .andDo(print())
+//                .andExpect(status().isOk())
+//        ;
+//    }
 
 }

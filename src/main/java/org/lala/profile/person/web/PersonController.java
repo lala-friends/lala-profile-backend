@@ -84,7 +84,7 @@ public class PersonController {
         }
     }
 
-    @PutMapping(value = "/{email}/projects")
+    @PutMapping(value = "/{email}")
     public ResponseEntity modifyPersonAndProjects(@PathVariable String email,
                                                   @RequestBody @Valid PersonWithProjectsDto personWithProjectsDto,
                                                   Errors errors,
@@ -113,6 +113,7 @@ public class PersonController {
                 projectRepository.deleteByOwner(owner);
                 savedProjects = new ArrayList<>();
                 for (Project p : personWithProjectsDto.getProjects()) {
+                    p.setOwner(owner);
                     Project savedProject = projectRepository.save(p);
                     savedProjects.add(savedProject);
                 }
@@ -140,28 +141,28 @@ public class PersonController {
         }
     }
 
-    @PutMapping(value = "/{id}")
-    public ResponseEntity modifyPersion(@PathVariable Integer id, @RequestBody @Valid PersonDto personDto, Errors errors
-            , @CurrentUser Account currentUser) {
-        Optional<Person> byId = personRepository.findById(id);
-        if (byId.isEmpty()) {
-            return ResponseEntity.notFound().build();
-        }
-
-        if (errors.hasErrors()) {
-            return ResponseEntity.badRequest().body(errors);
-        }
-
-        Person existsPerson = byId.get();
-        // 어드민 혹은 자기 자신만 수정 가능
-        boolean isAdmin = currentUser.getRoles().stream().filter(r -> r.equals(AccountRole.ADMIN)).count() == 1 ? true : false;
-        if (!isAdmin && !existsPerson.getEmail().equals(currentUser.getEmail())) {
-            return new ResponseEntity(HttpStatus.UNAUTHORIZED);
-        }
-
-        this.modelMapper.map(personDto, existsPerson);
-
-        Person savedPerson = personRepository.save(existsPerson);
-        return ResponseEntity.ok(savedPerson);
-    }
+//    @PutMapping(value = "/{id}")
+//    public ResponseEntity modifyPersion(@PathVariable Integer id, @RequestBody @Valid PersonDto personDto, Errors errors
+//            , @CurrentUser Account currentUser) {
+//        Optional<Person> byId = personRepository.findById(id);
+//        if (byId.isEmpty()) {
+//            return ResponseEntity.notFound().build();
+//        }
+//
+//        if (errors.hasErrors()) {
+//            return ResponseEntity.badRequest().body(errors);
+//        }
+//
+//        Person existsPerson = byId.get();
+//        // 어드민 혹은 자기 자신만 수정 가능
+//        boolean isAdmin = currentUser.getRoles().stream().filter(r -> r.equals(AccountRole.ADMIN)).count() == 1 ? true : false;
+//        if (!isAdmin && !existsPerson.getEmail().equals(currentUser.getEmail())) {
+//            return new ResponseEntity(HttpStatus.UNAUTHORIZED);
+//        }
+//
+//        this.modelMapper.map(personDto, existsPerson);
+//
+//        Person savedPerson = personRepository.save(existsPerson);
+//        return ResponseEntity.ok(savedPerson);
+//    }
 }
