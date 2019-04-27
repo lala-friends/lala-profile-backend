@@ -7,7 +7,6 @@ import org.lala.profile.accounts.vo.Account;
 import org.lala.profile.accounts.vo.AccountRole;
 import org.lala.profile.person.repository.PersonRepository;
 import org.lala.profile.person.vo.Person;
-import org.lala.profile.person.vo.PersonDto;
 import org.lala.profile.person.vo.PersonWithProjects;
 import org.lala.profile.person.vo.PersonWithProjectsDto;
 import org.lala.profile.products.groups.service.ProductGroupService;
@@ -26,7 +25,6 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Controller
 @RequestMapping(value = "/api/persons", produces = MediaTypes.HAL_JSON_UTF8_VALUE)
