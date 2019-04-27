@@ -162,7 +162,7 @@ public class PersonProjectListControllerTest extends AbstractCommonTest {
         newProject.add(project4);
         personWithProjectsDto.setProjects(newProject);
 
-        MvcResult mvcResult = mockMvc.perform(put("/api/persons/" + email + "/projects")
+        MvcResult mvcResult = mockMvc.perform(put("/api/persons/" + email)
                 .header(HttpHeaders.AUTHORIZATION, getBearerToken())
                 .content(this.objectMapper.writeValueAsString(personWithProjectsDto))
                 .contentType(MediaType.APPLICATION_JSON_UTF8))
