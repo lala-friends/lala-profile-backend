@@ -3,8 +3,6 @@ package org.lala.profile.products.web;
 import org.lala.profile.accounts.config.CurrentUser;
 import org.lala.profile.accounts.vo.Account;
 import org.lala.profile.accounts.vo.AccountRole;
-import org.lala.profile.person.repository.PersonRepository;
-import org.lala.profile.person.vo.Person;
 import org.lala.profile.products.repository.ProductRepository;
 import org.lala.profile.products.vo.Product;
 import org.lala.profile.products.vo.ProductDto;
@@ -12,7 +10,6 @@ import org.modelmapper.ModelMapper;
 import org.springframework.hateoas.MediaTypes;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
@@ -33,13 +30,10 @@ public class ProductController {
 
     private ProductValidator productValidator;
 
-    private PersonRepository personRepository;
-
-    public ProductController(ProductRepository productRepository, ModelMapper modelMapper, ProductValidator productValidator, PersonRepository personRepository) {
+    public ProductController(ProductRepository productRepository, ModelMapper modelMapper, ProductValidator productValidator) {
         this.productRepository = productRepository;
         this.modelMapper = modelMapper;
         this.productValidator = productValidator;
-        this.personRepository = personRepository;
     }
 
     @PostMapping
@@ -57,10 +51,7 @@ public class ProductController {
         }
 
         Product product = modelMapper.map(productDto, Product.class);
-//        product.setOwner(currentUser);
-        // person 조회
-        Person personByCurrentUser = personRepository.findByEmail(currentUser.getEmail()).orElseThrow(() -> new UsernameNotFoundException(currentUser.getEmail() + " is not found!!"));
-        product.setOwner(personByCurrentUser);
+        product.setOwner(currentUser);
         Product newProduct = this.productRepository.save(product);
 
         URI createUri = linkTo(ProductController.class).slash(newProduct.getId()).toUri();
