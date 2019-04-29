@@ -1,10 +1,8 @@
 package org.lala.profile.products.vo;
 
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.*;
-import org.lala.profile.accounts.config.AccountSerializer;
-import org.lala.profile.accounts.vo.Account;
 import org.lala.profile.commons.AbstractTimestampEntity;
+import org.lala.profile.person.vo.Person;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -30,7 +28,10 @@ public class Product extends AbstractTimestampEntity {
     private String[] imageUrls;
     private String color;
 
+//    @ManyToOne
+//    @JsonSerialize(using = AccountSerializer.class)
+//    private Account owner;
+
     @ManyToOne
-    @JsonSerialize(using = AccountSerializer.class)
-    private Account owner;
+    private Person owner;
 }
