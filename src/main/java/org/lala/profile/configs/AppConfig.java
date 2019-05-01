@@ -60,6 +60,7 @@ public class AppConfig {
 
                 Person adminPerson = Person.builder()
                         .email(appProperties.getAdminUsername())
+                        .account(admin)
                         .build();
                 personRepository.save(adminPerson);
 
@@ -73,6 +74,7 @@ public class AppConfig {
 
                 Person userPerson = Person.builder()
                         .email(appProperties.getUserUsername())
+                        .account(user)
                         .build();
                 personRepository.save(userPerson);
 

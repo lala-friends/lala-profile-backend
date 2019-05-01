@@ -1,11 +1,10 @@
 package org.lala.profile.person.vo;
 
 import lombok.*;
+import org.lala.profile.accounts.vo.Account;
 import org.lala.profile.commons.AbstractTimestampEntity;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Builder
 @AllArgsConstructor
@@ -26,4 +25,8 @@ public class Person extends AbstractTimestampEntity {
     private String github;
     private String facebook;
     private String[] keywords;
+
+    @OneToOne
+    @PrimaryKeyJoinColumn
+    private Account account;
 }
