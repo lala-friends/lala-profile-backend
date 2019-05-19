@@ -27,6 +27,6 @@ public class Person extends AbstractTimestampEntity {
     private String[] keywords;
 
     @OneToOne
-    @PrimaryKeyJoinColumn
+    @JoinColumn(name = "account_id")
     private Account account;
 }
